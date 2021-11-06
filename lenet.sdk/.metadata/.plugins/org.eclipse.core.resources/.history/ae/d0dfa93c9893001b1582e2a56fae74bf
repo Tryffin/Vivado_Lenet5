@@ -1,0 +1,92 @@
+#include <stdio.h> 
+
+void InitHostMem(float *Layer1_Weights_CPU,float *Layer2_Weights_CPU,float *Layer3_Weights_CPU,float *Layer4_Weights_CPU)
+{
+	// initial layer 1 weight
+	FILE * pFile1 = fopen ("lw1.wei","rb");
+	FILE * pFile11 = fopen ("lw1.h","w");
+	if (pFile1 != NULL && pFile11 != NULL)
+	{
+	    int i;
+		fprintf(pFile11, "float Layer1_Weights_CPU[156] = {");
+	    for(i=0;i<155;++i){
+			fread(&(Layer1_Weights_CPU[i]),sizeof(float),1,pFile1);
+			fprintf(pFile11, "%f,", Layer1_Weights_CPU[i]);
+		
+		}
+		fread(&(Layer1_Weights_CPU[155]),sizeof(float),1,pFile1);
+		fprintf(pFile11, "%f", Layer1_Weights_CPU[155]);
+		fprintf(pFile11, "};");
+		fclose(pFile1);
+		fclose(pFile11);
+		
+	}
+
+	// initial layer 2 weight
+	FILE * pFile2 = fopen ("lw2.wei","rb");
+	FILE * pFile12 = fopen ("lw2.h","w");
+	if (pFile2 != NULL && pFile12 != NULL)
+	{
+		fprintf(pFile12, "float Layer2_Weights_CPU[7800] = {");
+		fread(Layer2_Weights_CPU,sizeof(float),7800,pFile2);
+		for(int i=0;i<7799;++i){
+			fprintf(pFile12, "%f,", Layer2_Weights_CPU[i]);
+		}
+		fprintf(pFile12, "%f", Layer2_Weights_CPU[7799]);
+		fprintf(pFile12, "};");
+		fclose (pFile2);
+		fclose (pFile12);
+	}
+	// initial layer 3 weight
+	FILE * pFile3 = fopen ("lw3.wei","rb");
+	FILE * pFile13 = fopen ("lw3.h","w");
+	if (pFile3 != NULL && pFile13 != NULL)
+	{
+		fprintf(pFile13, "float Layer3_Weights_CPU[125100] = {");
+		fread(Layer3_Weights_CPU,sizeof(float),125100,pFile3);
+		for(int i=0;i<125099;++i){
+			fprintf(pFile13, "%f,", Layer3_Weights_CPU[i]);
+		}
+		fprintf(pFile13, "%f", Layer3_Weights_CPU[125099]);
+		fprintf(pFile13, "};");
+		fclose (pFile3);
+		fclose (pFile13);
+	}
+	// initial layer 4 weight
+	FILE * pFile4 = fopen ("lw4.wei","rb");
+	FILE * pFile14 = fopen ("lw4.h","w");
+	if (pFile4 != NULL && pFile14 != NULL)
+	{
+		fprintf(pFile14, "float Layer4_Weights_CPU[1010] = {");
+		fread(Layer4_Weights_CPU,sizeof(float),1010,pFile4);
+		for(int i=0;i<1009;++i){
+			fprintf(pFile14, "%f,", Layer4_Weights_CPU[i]);
+		}
+		fprintf(pFile14, "%f", Layer4_Weights_CPU[1009]);
+		fprintf(pFile14, "};");
+		fclose (pFile4);
+		fclose (pFile14);
+	}
+}
+
+void readIn(float *layer1)
+{
+	FILE *fp;
+	fp=fopen("in.neu","rb");
+	if(fp)
+	{
+		fread(layer1,sizeof(float),29*29,fp);
+		fclose(fp);
+	}
+}
+
+void output(double *final)
+{
+	FILE *fp=0;
+	fp=fopen("out.res","wb");
+	if(fp)
+	{
+		fwrite(final,sizeof(double),10,fp);
+		fclose(fp);
+	}
+}
